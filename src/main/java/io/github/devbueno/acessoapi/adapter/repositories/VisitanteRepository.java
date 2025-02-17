@@ -5,5 +5,5 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface VisitanteRepository extends JpaRepository<VisitanteEntity, Long> {
-    VisitanteEntity findByRg(String rg);
+    Optional<VisitanteEntity> findByRg(String rg);
 }

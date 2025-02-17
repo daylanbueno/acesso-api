@@ -3,6 +3,7 @@ package io.github.devbueno.acessoapi.core.services;
 import io.github.devbueno.acessoapi.core.domain.Visitante;
 import io.github.devbueno.acessoapi.core.ports.VisitanteRepositoryPort;
 import io.github.devbueno.acessoapi.core.ports.VisitanteServicePort;
+import java.util.Collection;
 
 public class VisitanteService implements VisitanteServicePort {
 
@@ -15,13 +16,23 @@ public class VisitanteService implements VisitanteServicePort {
     @Override
     public Visitante createVisitante(Visitante visitante) {
 
-        Visitante existenteVisitante = visitanteRepositoryPort.obtainByRg(visitante.getRg());
-
-        if (existenteVisitante != null) {
-            throw new IllegalArgumentException("Visitante já existe");
-        }
+        visitanteRepositoryPort.obtainByRg(visitante.getRg())
+          .ifPresent(v -> {
+              throw new IllegalArgumentException("Visitante já existe");
+          });
 
         return visitanteRepositoryPort.create(visitante);
+    }
+
+    @Override
+    public Visitante obtainByRg(String rg) {
+        return visitanteRepositoryPort.obtainByRg(rg)
+          .orElseThrow(() -> new IllegalArgumentException("Visitante não encontrado"));
+    }
+
+    @Override
+    public Collection<Visitante> listAll() {
+        return visitanteRepositoryPort.listAll();
     }
 
 }

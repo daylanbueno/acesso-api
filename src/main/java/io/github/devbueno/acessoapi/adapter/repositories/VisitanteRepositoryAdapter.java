@@ -3,6 +3,7 @@ package io.github.devbueno.acessoapi.adapter.repositories;
 import io.github.devbueno.acessoapi.adapter.entities.VisitanteEntity;
 import io.github.devbueno.acessoapi.core.domain.Visitante;
 import io.github.devbueno.acessoapi.core.ports.VisitanteRepositoryPort;
+import java.util.Collection;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -24,11 +25,15 @@ public class VisitanteRepositoryAdapter implements VisitanteRepositoryPort {
     }
 
     @Override
-    public Visitante obtainByRg(String rg) {
-        VisitanteEntity visitanteEntity = visitanteRepository.findByRg(rg);
-        if (visitanteEntity == null) {
-            return null;
-        }
-        return modelMapper.map(visitanteEntity, Visitante.class);
+    public Optional<Visitante> obtainByRg(String rg) {
+       return visitanteRepository.findByRg(rg)
+          .map(visitanteEntity -> modelMapper.map(visitanteEntity, Visitante.class));
+    }
+
+    @Override
+    public Collection<Visitante> listAll() {
+        return visitanteRepository.findAll().stream()
+          .map(visitanteEntity -> modelMapper.map(visitanteEntity, Visitante.class))
+          .toList();
     }
 }
