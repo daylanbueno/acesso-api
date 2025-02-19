@@ -1,7 +1,6 @@
 package io.github.devbueno.acessoapi.core.services;
 
 import io.github.devbueno.acessoapi.core.domain.Visitante;
-import io.github.devbueno.acessoapi.core.exceptions.BusinessException;
 import io.github.devbueno.acessoapi.core.ports.VisitanteRepositoryPort;
 import io.github.devbueno.acessoapi.core.ports.VisitanteServicePort;
 import java.util.Collection;
@@ -19,7 +18,7 @@ public class VisitanteService implements VisitanteServicePort {
 
         visitanteRepositoryPort.obtainByRg(visitante.getRg())
           .ifPresent(v -> {
-              throw new BusinessException("Visitante já existe");
+              throw new IllegalArgumentException("Visitante já existe");
           });
 
         return visitanteRepositoryPort.create(visitante);
