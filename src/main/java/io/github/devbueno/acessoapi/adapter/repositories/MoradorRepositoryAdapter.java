@@ -8,6 +8,8 @@ import io.github.devbueno.acessoapi.core.domain.Pessoa;
 import io.github.devbueno.acessoapi.core.domain.Usuario;
 import io.github.devbueno.acessoapi.core.ports.MoradorRepositoryPort;
 import io.github.devbueno.acessoapi.core.ports.UsuarioRepositoryPort;
+import java.util.Collection;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
@@ -35,6 +37,14 @@ public class MoradorRepositoryAdapter implements MoradorRepositoryPort {
             return null;
         }
         return modelMapper.map(moradoByCpf, Morador.class);
+    }
+
+    @Override
+    public Collection<Morador> findAll() {
+        return moradorRepository.findAll()
+          .stream()
+          .map(moradorEntity -> modelMapper.map(moradorEntity, Morador.class))
+          .toList();
     }
 
 }
